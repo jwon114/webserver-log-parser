@@ -1,12 +1,11 @@
-require 'byebug'
 require './lib/error'
 
-class LogParser  
+class LogParser
   attr_reader :file_path, :visits
 
   def initialize(file_path)
     @file_path = file_exists?(file_path)
-    @visits = Hash.new
+    @visits = {}
   end
 
   def parse
@@ -17,38 +16,46 @@ class LogParser
     end
   end
 
-  def most_page_views
-    sort_and_order(count_views(unique: false))
+  def list_most_page_views
+    print_views(most_page_views, 'visits')
   end
 
-  def most_unique_views
-    sort_and_order(count_views(unique: true))
+  def list_most_unique_views
+    print_views(most_unique_views, 'unique views')
   end
 
   private
 
   def file_exists?(path)
-    raise FileNotFound.new('File does not exist') unless File.file?(path)
+    raise ErrorHandler::FileNotFound.new('File does not exist') unless File.file?(path)
+
     path
   end
 
   def count_views(unique:)
-    visits.each_with_object(Hash.new) do |(url, ip_addresses), views| 
+    visits.each_with_object({}) do |(url, ip_addresses), views|
       views[url] = unique ? ip_addresses.uniq.count : ip_addresses.count
     end
   end
 
-  def sort_and_order(hash)
+  def sort_descending(hash)
     hash
       .sort_by(&:last)
       .reverse
-      .inject(Array.new) { |arr, v| arr << Hash[v[0], v[1]] }
+      .inject([]) { |arr, v| arr << Hash[v[0], v[1]] }
   end
 
-  def print(logs, type)
-    byebug
-    logs.each do |(url, count)|
-      puts "#{url}: #{count} #{type}"
+  def most_page_views
+    sort_descending(count_views(unique: false))
+  end
+
+  def most_unique_views
+    sort_descending(count_views(unique: true))
+  end
+
+  def print_views(logs, type)
+    logs.each do |page|
+      page.each { |url, count| puts "#{url} #{count} #{type}" }
     end
   end
 end

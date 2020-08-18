@@ -1,5 +1,5 @@
 group :test, :development do
-  gem 'rspec'
   gem 'byebug'
+  gem 'rspec'
   gem 'rubocop'
 end
