@@ -22,7 +22,7 @@ rspec
 ## Implementation Details
 A single Log Parser class for opening, parsing and extracting data from the log file. On initialization the file path is set when provided as a run argument.
 
-The parse method reads the file line by line and saves the data to memory in a instance variable hash named visits, with the webpage url as a key and IP addresses stored in an array. To find the most viewed webpages, the visits hash is iterated and the IP address array counted. For unique visits, the unique parameter is passed to the method as a boolean. Duplicate IP addresses are removed from the array before counted. Views counts are sorted in descending order.
+The parse method reads the file line by line, splitting the string by whitespace to a URL and IP address. This data is saved to memory in a instance variable hash named visits, with the webpage URL as a key and a value of IP addresses in an array. To find the most viewed webpages, the visits hash is iterated and the IP address array counted. For unique visits, the unique parameter is passed to the method as a boolean. Duplicate IP addresses are removed from the array before counted. Views counts are sorted in descending order.
 
 A print method formats and outputs the view counts to the terminal.
 
