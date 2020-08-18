@@ -6,10 +6,12 @@ parser = LogParser.new(ARGV[0])
 parser.parse
 
 puts 'List of Webpages with Most Views'
+puts '------------------------'
 parser.list_most_page_views
 
 puts
 
 puts 'List of Webpages with Most Unique Views'
+puts '------------------------'
 parser.list_most_unique_views
 
